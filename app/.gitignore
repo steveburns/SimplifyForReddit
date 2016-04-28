@@ -12,3 +12,6 @@
 /.idea
 /build
 /captures
+
+# Ignore AuthConstants file
+AuthConstants.java

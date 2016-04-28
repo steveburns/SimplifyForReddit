@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import steveburns.com.simplifyforreddit.AuthConstants;
+
 /**
  * Created by sburns on 4/20/16.
  */
@@ -23,10 +25,19 @@ public class RedditData {
     private static final String APP_ID = "simplifyforreddit";
     private static final String PLATFORM = "android";
     private static final String VERSION = "v0.1";
-    private static final String CLIENT_ID = "PUT_CLIENTID_HERE";
-    private static final String APP_CREATOR = "PUT_USERNAME_HERE";
-    private static final String CLIENT_SECRET = "PUT_CLIENT_SECRET_HERE";
-    private static final String PASSWORD = "PUT_PASSWORD_HERE";
+
+    /* To compile and run, you must provide the following values by adding an AuthConstants class like this.
+    -- Note that this file is referenced in .gitignore and therefore will not be placed into version control
+    public class AuthConstants {
+        public static final String CLIENT_ID = "PUT_CLIENTID_HERE";
+        public static final String APP_CREATOR = "PUT_USERNAME_HERE";
+        public static final String CLIENT_SECRET = "PUT_CLIENT_SECRET_HERE";
+        public static final String PASSWORD = "PUT_PASSWORD_HERE";
+    }*/
+    private static final String CLIENT_ID = AuthConstants.CLIENT_ID;
+    private static final String APP_CREATOR = AuthConstants.APP_CREATOR;
+    private static final String CLIENT_SECRET = AuthConstants.CLIENT_SECRET;
+    private static final String PASSWORD = AuthConstants.PASSWORD;
 
 
     private static RedditClient mRedditClient = null;
