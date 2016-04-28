@@ -3,16 +3,11 @@ package steveburns.com.simplifyforreddit.data;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.content.OperationApplicationException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.RemoteException;
 import android.util.Log;
 
-import net.dean.jraw.RedditClient;
 import net.dean.jraw.models.Subreddit;
-
-import org.json.JSONException;
 
 /**
  * Created by sburns on 4/21/16.

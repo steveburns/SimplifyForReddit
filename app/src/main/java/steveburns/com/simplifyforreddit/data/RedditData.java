@@ -21,9 +21,9 @@ import java.util.UUID;
 public class RedditData {
     private static final String TAG = RedditData.class.getSimpleName();
     private static final String APP_ID = "simplifyforreddit";
-    private static final String CLIENT_ID = "-fDYP2zYaDM6cw";
     private static final String PLATFORM = "android";
     private static final String VERSION = "v0.1";
+    private static final String CLIENT_ID = "PUT_CLIENTID_HERE";
     private static final String APP_CREATOR = "PUT_USERNAME_HERE";
     private static final String CLIENT_SECRET = "PUT_CLIENT_SECRET_HERE";
     private static final String PASSWORD = "PUT_PASSWORD_HERE";
