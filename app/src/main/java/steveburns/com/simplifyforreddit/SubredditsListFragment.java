@@ -14,6 +14,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import steveburns.com.simplifyforreddit.data.SubredditLoader;
@@ -22,7 +23,7 @@ import steveburns.com.simplifyforreddit.data.SubredditsContract;
 /**
  * A fragment representing a list of Items.
  */
-public class SubredditFragment extends Fragment implements
+public class SubredditsListFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -33,12 +34,12 @@ public class SubredditFragment extends Fragment implements
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public SubredditFragment() {
+    public SubredditsListFragment() {
     }
 
     @SuppressWarnings("unused")
-    public static SubredditFragment newInstance(int columnCount) {
-        SubredditFragment fragment = new SubredditFragment();
+    public static SubredditsListFragment newInstance(int columnCount) {
+        SubredditsListFragment fragment = new SubredditsListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -68,7 +69,7 @@ public class SubredditFragment extends Fragment implements
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            getActivity().getLoaderManager().initLoader(0, null, SubredditFragment.this);
+            getActivity().getLoaderManager().initLoader(0, null, SubredditsListFragment.this);
         }
         return view;
     }
@@ -119,22 +120,23 @@ public class SubredditFragment extends Fragment implements
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_item, parent, false);
-            final ViewHolder vh = new ViewHolder(view);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            SubredditsContract.Subreddits.buildItemUri(getItemId(vh.getAdapterPosition()))));
-                }
-            });
-            return vh;
+            View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_subreddits_list_item, parent, false);
+            return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             mCursor.moveToPosition(position);
+            final Long ID = mCursor.getLong(SubredditLoader.Query._ID);
             holder.titleView.setText(mCursor.getString(SubredditLoader.Query.NAME));
+            holder.removeView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Remove this subreddit from the list
+                    getContext().getContentResolver().delete(
+                            SubredditsContract.Subreddits.buildItemUri(ID), null, null);
+                }
+            });
         }
 
         @Override
@@ -145,10 +147,12 @@ public class SubredditFragment extends Fragment implements
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView titleView;
+        public ImageButton removeView;
 
         public ViewHolder(View view) {
             super(view);
             titleView = (TextView) view.findViewById(R.id.subreddit_name);
+            removeView = (ImageButton) view.findViewById(R.id.remove_subreddit);
         }
     }
 }

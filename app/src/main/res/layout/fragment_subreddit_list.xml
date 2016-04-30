@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="steveburns.com.simplifyforreddit.SubredditFragment"
-    tools:listitem="@layout/fragment_subreddit" />
+    tools:context=".SubredditsListFragment"
+    tools:listitem="@layout/fragment_subreddits_list_item" />

@@ -22,7 +22,7 @@ public class SubredditsContract {
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.steveburns.com.simplifyforreddit.items";
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.steveburns.com.simplifyforreddit.items";
 
-        public static final String DEFAULT_SORT = NAME + " DESC";
+        public static final String DEFAULT_SORT = NAME + " ASC";
 
         /** Matches: /items/ */
         public static Uri buildDirUri() {
