@@ -6,8 +6,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-//import android.support.v4.app.LoaderManager;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +22,7 @@ import steveburns.com.simplifyforreddit.data.SubredditsContract;
 /**
  * A fragment representing a list of Items.
  */
-public class SubredditFragment extends DialogFragment implements
+public class SubredditFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String ARG_COLUMN_COUNT = "column-count";

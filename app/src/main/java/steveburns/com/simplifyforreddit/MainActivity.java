@@ -98,26 +98,10 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            SubredditFragment fragment = SubredditFragment.newInstance(1);
-            // phone implementation
-            getSupportFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, fragment, Constants.SUBREDDIT_LIST_FRAG_TAG)
-                    .commit();
+
+            startActivity(new Intent(this, SubredditsActivity.class));
             return true;
         }
-
-        /*
-        getSupportFragmentManager().beginTransaction()
-                .replace(android.R.id.content, fragment, Constants.PLAYER_FRAG_TAG)
-                .commit();
-*/
-
-/*
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_top_tracks_container, new TopTracksFragment(), Constants.TOP_TRACK_FRAG_TAG)
-                        .commit();
-*/
-
         return super.onOptionsItemSelected(item);
     }
 }

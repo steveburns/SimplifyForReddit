@@ -31,6 +31,15 @@
             android:authorities="steveburns.com.simplifyforreddit"
             android:exported="false" />
 
+        <activity
+            android:name=".SubredditsActivity"
+            android:label="@string/title_activity_subreddits"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="steveburns.com.simplifyforreddit.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
