@@ -28,7 +28,6 @@ public class SubredditsDatabase extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + Tables.SUBREDDITS + " ("
                 + SubredditsContract.SubredditsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + SubredditsContract.SubredditsColumns.NAME + " TEXT NOT NULL"
-//                + SubredditsContract.SubredditsColumns.DESCRIPTION + " TEXT"
                 + ")" );
         
         // Insert pre-installed list of subreddits

@@ -2,4 +2,7 @@
     <string name="app_name">SimplifyForReddit</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_subreddits">SubredditsActivity</string>
+
+    <string name="add_subreddit">Add Subreddit</string>
+    <string name="remove_subreddit">Remove Subreddit: %s</string>
 </resources>

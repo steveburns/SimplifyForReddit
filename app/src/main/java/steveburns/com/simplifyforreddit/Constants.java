@@ -5,5 +5,5 @@ package steveburns.com.simplifyforreddit;
  */
 public class Constants {
     //Fragment Tags
-    public static final String SUBREDDIT_LIST_FRAG_TAG = "SUBREDDITLISTFRAG";
+    public static final String ADD_SUBREDDIT_FRAG_TAG = "ADDSUBREDDITFRAG";
 }

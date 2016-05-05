@@ -2,11 +2,13 @@ package steveburns.com.simplifyforreddit;
 
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -128,13 +130,29 @@ public class SubredditsListFragment extends Fragment implements
         public void onBindViewHolder(ViewHolder holder, int position) {
             mCursor.moveToPosition(position);
             final Long ID = mCursor.getLong(SubredditLoader.Query._ID);
-            holder.titleView.setText(mCursor.getString(SubredditLoader.Query.NAME));
+            final String subredditName = mCursor.getString(SubredditLoader.Query.NAME);
+            holder.titleView.setText(subredditName);
             holder.removeView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Remove this subreddit from the list
-                    getContext().getContentResolver().delete(
-                            SubredditsContract.Subreddits.buildItemUri(ID), null, null);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage(String.format(getContext().getString(R.string.remove_subreddit), subredditName))
+                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // User cancelled the dialog
+                                }
+                            })
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // Remove this subreddit from the list
+                                    getContext().getContentResolver().delete(
+                                            SubredditsContract.Subreddits.buildItemUri(ID), null, null);
+                                }
+                            });
+
+                    builder.show();
+
                 }
             });
         }

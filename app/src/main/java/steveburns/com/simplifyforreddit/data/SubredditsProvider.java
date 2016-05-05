@@ -65,6 +65,13 @@ public class SubredditsProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+
+        // See if this name is already stored.
+        long existingId = getSubredditIdFromName(uri, values.size() > 0 ? (String)values.get(SubredditsContract.Subreddits.NAME) : null);
+        if (existingId >= 0) {
+            return SubredditsContract.Subreddits.buildItemUri(existingId);
+        }
+
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         switch (match) {
@@ -77,6 +84,17 @@ public class SubredditsProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
         }
+    }
+
+    private long getSubredditIdFromName(Uri uri, String name) {
+        final SelectionBuilder builder = buildSelection(uri);
+        Cursor cursor = builder.where(SubredditsContract.Subreddits.NAME + "=?", name).query(mOpenHelper.getReadableDatabase(), null, null);
+        long id = -1;
+        if(cursor.moveToFirst()) {
+            id = cursor.getLong(cursor.getColumnIndex(SubredditsContract.Subreddits._ID));
+        }
+        cursor.close();
+        return id;
     }
 
     @Override
