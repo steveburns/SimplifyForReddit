@@ -39,4 +39,9 @@ public class SubredditsContract {
             return Long.parseLong(itemUri.getPathSegments().get(1));
         }
     }
+
+    interface PostColumns {
+        String _ID = "_id";
+        String SUBREDDIT_NAME = "subreddit_name";
+    }
 }

@@ -80,7 +80,6 @@ public class AddSubredditFragment extends DialogFragment {
                 .setView(view);
 
         return builder.create();
-//        return super.onCreateDialog(savedInstanceState);
     }
 
     /**

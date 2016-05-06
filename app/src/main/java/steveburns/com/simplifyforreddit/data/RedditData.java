@@ -7,6 +7,7 @@ import net.dean.jraw.http.UserAgent;
 import net.dean.jraw.http.oauth.Credentials;
 import net.dean.jraw.http.oauth.OAuthData;
 import net.dean.jraw.http.oauth.OAuthException;
+import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.Subreddit;
 
 import java.io.IOError;
@@ -79,87 +80,17 @@ public class RedditData {
         return subreddit;
     }
 
-//    // TODO:
-//    // Should we hold onto the Auth stuff between calls to get data and only
-//    //   renew if we need to or do we Auth everytime?
-//    // OR do we hold on to the RedditClient????
-//
-//    public static void testIt() {
-//        UserAgent userAgent = UserAgent.of(PLATFORM, APP_ID, VERSION, APP_CREATOR);
-//
-//        RedditClient redditClient = new RedditClient(userAgent);
-////        Credentials credentials = Credentials.userlessApp(APP_ID, DEVICE_ID);
-////        Credentials credentials = Credentials.userless(APP_ID, CLIENT_SECRET, DEVICE_ID);
-//        Credentials credentials = Credentials.script(APP_CREATOR, "asdfasdf!*", "-fDYP2zYaDM6cw", "4I_FHAABGE-w_ocCXeHbeAz3p6c");
-//
-//        /*
-//You must supply your OAuth2 client's credentials via HTTP Basic Auth for this request.
-//The "user" is the client_id,
-//the "password" is the client_secret
-//
-//reddit account:
-//burnssteve / asdfasdf!*
-//        */
-//
-//        try {
-////            OAuthData authData = redditClient.getOAuthHelper().easyAuth(credentials);
-//            OAuthData authData = redditClient.getOAuthHelper().easyAuth(credentials);
-//
-//            redditClient.authenticate(authData);
-//
-//            HashMap<String, String> nameToDescription = new HashMap<>();
-//            ArrayList<String> subreddits = new ArrayList<>(10);
-//            subreddits.add("android");
-//            subreddits.add("art");
-//            subreddits.add("askscience");
-//            subreddits.add("books");
-//            subreddits.add("diy");
-//            subreddits.add("documentaries");
-//            subreddits.add("fitness");
-//            subreddits.add("food");
-//            subreddits.add("futurology");
-//            subreddits.add("gadgets");
-//            subreddits.add("gaming");
-//            subreddits.add("getmotivated");
-//            subreddits.add("history");
-//            subreddits.add("ios");
-//            subreddits.add("lifeprotips");
-//            subreddits.add("mildlyinteresting");
-//            subreddits.add("mobile");
-//            subreddits.add("movies");
-//            subreddits.add("music");
-//            subreddits.add("news");
-//            subreddits.add("personalfinance");
-//            subreddits.add("philosophy");
-//            subreddits.add("photoshopbattles");
-//            subreddits.add("science");
-//            subreddits.add("space");
-//            subreddits.add("sports");
-//            subreddits.add("worldnews");
-//
-//            for(String name : subreddits) {
-//                Subreddit sr = redditClient.getSubreddit(name);
-//
-////                String displayName = sr.getDisplayName();
-////                String HeaderImage = sr.getHeaderImage();
-////                String headerTitle = sr.getHeaderTitle();
-////                String title = sr.getTitle();
-//                Boolean isNsfw = sr.isNsfw();
-//                String publicDescription = sr.getPublicDescription();
-////                Subreddit.Type type = sr.getSubredditType();
-//
-//                String nothing = "nothing";
-//
-//                nameToDescription.put(name, publicDescription);
-//            }
-//
-//            String data = nameToDescription.toString();
-//            Log.d(TAG, data);
-//        } catch (RuntimeException e) {
-//            Log.d(TAG, e.toString());
-//        } catch (OAuthException e) {
-//            Log.d(TAG, e.toString());
-//        }
-//
-//    }
+    public static Submission getSubredditSubmission(String subredditName) {
+        int maxAttempts = 2;
+        Submission subredditSubmission = null;
+        for(int attempt = 1; attempt <= maxAttempts && subredditSubmission == null; attempt++) {
+            try {
+                // force the auth renewal if we're past the first attempt
+                subredditSubmission = getAuthorizedClient(attempt > 1).getRandomSubmission(subredditName);
+            } catch (RuntimeException e) {
+                Log.d(TAG, e.toString());
+            }
+        }
+        return subredditSubmission;
+    }
 }

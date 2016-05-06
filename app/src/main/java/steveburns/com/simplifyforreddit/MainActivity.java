@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,9 +73,11 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver mRefreshingReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-        if (UpdaterService.BROADCAST_ACTION_GET_RANDOM_POSTS.equals(intent.getAction())) {
-            updateRefreshingUI();
-        }
+            if (UpdaterService.BROADCAST_ACTION_GET_RANDOM_POSTS.equals(intent.getAction())) {
+
+                Log.d(TAG, "Received broadcast: BROADCAST_ACTION_GET_RANDOM_POSTS");
+                updateRefreshingUI();
+            }
         }
     };
 
