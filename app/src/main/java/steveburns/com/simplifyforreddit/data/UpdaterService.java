@@ -166,7 +166,7 @@ public class UpdaterService extends IntentService {
 
             // Submission comments
             final int maxNumComments = 3;  // Limit the number of comments we store to this
-            final int maxCommentLen = 128; // Limit the comment length to this
+            final int maxCommentLen = 256; // Limit the comment length to this
             int i = 0;
             CommentNode commentNode = randomSubmission.getComments();
             for (CommentNode comment : commentNode) {

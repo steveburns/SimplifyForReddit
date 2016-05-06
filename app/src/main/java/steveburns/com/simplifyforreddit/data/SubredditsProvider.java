@@ -145,6 +145,13 @@ public class SubredditsProvider extends ContentProvider {
                 final String _id = paths.get(1);
                 return builder.table(Tables.SUBREDDITS).where(SubredditsContract.Subreddits._ID + "=?", _id);
             }
+            case SUBMISSIONS: {
+                return builder.table(Tables.SUBMISSIONS);
+            }
+            case SUBMISSIONS__ID: {
+                final String _id = paths.get(1);
+                return builder.table(Tables.SUBMISSIONS).where(SubredditsContract.Submissions._ID + "=?", _id);
+            }
             default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
