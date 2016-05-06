@@ -18,10 +18,13 @@ public class SubredditsProvider extends ContentProvider {
 
     interface Tables {
         String SUBREDDITS = "subreddits";
+        String SUBMISSIONS = "submissions";
     }
 
     private static final int ITEMS = 0;
     private static final int ITEMS__ID = 1;
+    private static final int SUBMISSIONS = 2;
+    private static final int SUBMISSIONS__ID = 3;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
@@ -30,6 +33,8 @@ public class SubredditsProvider extends ContentProvider {
         final String authority = SubredditsContract.CONTENT_AUTHORITY;
         matcher.addURI(authority, "items", ITEMS);
         matcher.addURI(authority, "items/#", ITEMS__ID);
+        matcher.addURI(authority, "submissions", SUBMISSIONS);
+        matcher.addURI(authority, "submissions/#", SUBMISSIONS__ID);
         return matcher;
     }
 
@@ -47,6 +52,10 @@ public class SubredditsProvider extends ContentProvider {
                 return SubredditsContract.Subreddits.CONTENT_TYPE;
             case ITEMS__ID:
                 return SubredditsContract.Subreddits.CONTENT_ITEM_TYPE;
+            case SUBMISSIONS:
+                return SubredditsContract.Submissions.CONTENT_TYPE;
+            case SUBMISSIONS__ID:
+                return SubredditsContract.Submissions.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -66,20 +75,27 @@ public class SubredditsProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
 
-        // See if this name is already stored.
-        long existingId = getSubredditIdFromName(uri, values.size() > 0 ? (String)values.get(SubredditsContract.Subreddits.NAME) : null);
-        if (existingId >= 0) {
-            return SubredditsContract.Subreddits.buildItemUri(existingId);
-        }
-
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case ITEMS: {
+                // See if this name is already stored.
+                long existingId = getSubredditIdFromName(uri, values.size() > 0 ? (String)values.get(SubredditsContract.Subreddits.NAME) : null);
+                if (existingId >= 0) {
+                    return SubredditsContract.Subreddits.buildItemUri(existingId);
+                }
+
                 final long _id = db.insertOrThrow(Tables.SUBREDDITS, null, values);
                 getContext().getContentResolver().notifyChange(uri, null);
                 return SubredditsContract.Subreddits.buildItemUri(_id);
             }
+
+            case SUBMISSIONS: {
+                final long _id = db.insertOrThrow(Tables.SUBMISSIONS, null, values);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return SubredditsContract.Subreddits.buildItemUri(_id);
+            }
+
             default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
             }

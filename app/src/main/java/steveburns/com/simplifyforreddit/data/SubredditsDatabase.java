@@ -25,9 +25,29 @@ public class SubredditsDatabase extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
+        /* Subreddits */
         db.execSQL("CREATE TABLE " + Tables.SUBREDDITS + " ("
                 + SubredditsContract.SubredditsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + SubredditsContract.SubredditsColumns.NAME + " TEXT NOT NULL"
+                + ")" );
+
+        /* Submissions */
+        db.execSQL("CREATE TABLE " + Tables.SUBMISSIONS + " ("
+                + SubredditsContract.SubmissionColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + SubredditsContract.SubmissionColumns.SUBREDDIT_NAME + " TEXT NOT NULL, "
+                + SubredditsContract.SubmissionColumns.TITLE + " TEXT NULL, "
+                + SubredditsContract.SubmissionColumns.AUTHOR + " TEXT NULL, "
+                + SubredditsContract.SubmissionColumns.CREATE_DATE_UTC + " TEXT NULL, "
+                + SubredditsContract.SubmissionColumns.SELF_TEXT + " TEXT NULL, "
+                + SubredditsContract.SubmissionColumns.URL + " TEXT NULL, "
+                + SubredditsContract.SubmissionColumns.THUMBNAIL + " TEXT NULL, "
+                + SubredditsContract.SubmissionColumns.THUMBNAIL_TYPE + " TEXT NULL, "
+                + SubredditsContract.SubmissionColumns.POST_HINT + " TEXT NULL, "
+                + SubredditsContract.SubmissionColumns.PERMA_LINK + " TEXT NULL, "
+                + SubredditsContract.SubmissionColumns.COMMENT_COUNT + " TEXT NULL, "
+                + SubredditsContract.SubmissionColumns.COMMENT_1 + " TEXT NULL, "
+                + SubredditsContract.SubmissionColumns.COMMENT_2 + " TEXT NULL, "
+                + SubredditsContract.SubmissionColumns.COMMENT_3 + " TEXT NULL "
                 + ")" );
         
         // Insert pre-installed list of subreddits

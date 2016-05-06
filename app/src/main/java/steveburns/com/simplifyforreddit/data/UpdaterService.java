@@ -1,14 +1,17 @@
 package steveburns.com.simplifyforreddit.data;
 
 import android.app.IntentService;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.util.Pair;
 import android.text.TextUtils;
 import android.util.Log;
 
+import net.dean.jraw.models.CommentNode;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.Subreddit;
 
@@ -24,7 +27,7 @@ public class UpdaterService extends IntentService {
     // Get random post action
     public static final String ACTION_GET_RANDOM_POSTS = "steveburns.com.simplifyforreddit.intent.ACTION_GET_RANDOM_POSTS";
     public static final String EXTRA_NUM_RANDOM_POSTS = "num_random_posts";
-    public static final Integer EXTRA_NUM_RANDOM_POSTS_DEFAULT_VALUE = 3;
+    public static final Integer EXTRA_NUM_RANDOM_POSTS_DEFAULT_VALUE = 5;
     public static final String BROADCAST_ACTION_GET_RANDOM_POSTS = "steveburns.com.simplifyforreddit.intent.BROADCAST_GET_RANDOM_POSTS";
 
     // Get subreddit using name provided
@@ -89,7 +92,7 @@ public class UpdaterService extends IntentService {
             cursor = getApplicationContext()
                     .getContentResolver()
                     .query(SubredditsContract.Subreddits.buildDirUri(),
-                            new String[]{SubredditsContract.Subreddits.NAME},
+                            new String[]{SubredditsContract.Subreddits._ID, SubredditsContract.Subreddits.NAME},
                             null,
                             null,
                             SubredditsContract.Subreddits.DEFAULT_SORT);
@@ -99,13 +102,14 @@ public class UpdaterService extends IntentService {
         }
 
         if (cursor != null) {
-            List<String> subreddits = new ArrayList<>();
+            List<Pair<Long, String>> subreddits = new ArrayList<>();
             try {
                 if(cursor.moveToFirst()) {
                     do {
+                        Long id = cursor.getLong(cursor.getColumnIndex(SubredditsContract.Subreddits._ID));
                         String name = cursor.getString(cursor.getColumnIndex(SubredditsContract.Subreddits.NAME));
                         if (!TextUtils.isEmpty(name)) {
-                            subreddits.add(name);
+                            subreddits.add(new Pair<>(id, name));
                         }
                     } while (cursor.moveToNext());
                 }
@@ -120,7 +124,7 @@ public class UpdaterService extends IntentService {
                 int pos = (int)Math.round (randomValue * (subreddits.size()-1));
                 if (pos >= 0 && pos < subreddits.size()) {
                     Log.d(TAG, String.format("Ramdomly selected subreddit: %s", subreddits.get(pos)));
-                    storeRandomSubmissionForSubreddit(subreddits.get(pos));
+                    storeRandomSubmissionForSubreddit(subreddits.get(pos).first, subreddits.get(pos).second);
                 }
             }
         }
@@ -132,29 +136,57 @@ public class UpdaterService extends IntentService {
      * @param subredditName - name of the subreddit
      * @return result
      */
-    private boolean storeRandomSubmissionForSubreddit(String subredditName) {
+    private boolean storeRandomSubmissionForSubreddit(Long id, String subredditName) {
 
         Submission randomSubmission = RedditData.getSubredditSubmission(subredditName);
         if (randomSubmission.isNsfw()) {
             // We lazily allow the user to add new subreddits to the app without checking
             //   if they are safe for work. That means one of these randomly selected ones
-            //   could be one of those. Let's remove it from our list if we detect that.
+            //   might not be safe. Let's remove it from our list if we detect that.
 
+            getApplicationContext().getContentResolver().delete(
+                    SubredditsContract.Subreddits.buildItemUri(id), null, null);
             return false;
-        }
 
-        Log.d(TAG, String.format(">>> subreddit = %s <<<<<<", randomSubmission.getSubredditName()));
-        Log.d(TAG, String.format("title = %s", randomSubmission.getTitle()));
-        Log.d(TAG, String.format("author = %s", randomSubmission.getAuthor()));
-        Log.d(TAG, String.format("created_utc = %s", randomSubmission.getCreatedUtc().toString()));
-        Log.d(TAG, String.format("self_text = %s", randomSubmission.getSelftext()));
-        Log.d(TAG, String.format("short_url = %s", randomSubmission.getShortURL()));
-        Log.d(TAG, String.format("url = %s", randomSubmission.getUrl()));
-        Log.d(TAG, String.format("thumbnail = %s", randomSubmission.getThumbnail()));
-        Log.d(TAG, String.format("thumbnail_type = %s", randomSubmission.getThumbnailType().toString()));
-        Log.d(TAG, String.format("post_hint = %s", randomSubmission.getPostHint()));
-        Log.d(TAG, String.format("perma_link = %s", randomSubmission.getPermalink()));
-        Log.d(TAG, String.format("preview = %s", randomSubmission.data("preview")));
+        } else {
+
+            ContentValues cv = new ContentValues();
+
+            cv.put(SubredditsContract.Submissions.SUBREDDIT_NAME, randomSubmission.getSubredditName());
+            cv.put(SubredditsContract.Submissions.TITLE, randomSubmission.getTitle());
+            cv.put(SubredditsContract.Submissions.AUTHOR, randomSubmission.getAuthor());
+            cv.put(SubredditsContract.Submissions.CREATE_DATE_UTC, randomSubmission.getCreatedUtc().toString());
+            cv.put(SubredditsContract.Submissions.SELF_TEXT, randomSubmission.getSelftext());
+            cv.put(SubredditsContract.Submissions.URL, randomSubmission.getUrl());
+            cv.put(SubredditsContract.Submissions.THUMBNAIL, randomSubmission.getThumbnail());
+            cv.put(SubredditsContract.Submissions.THUMBNAIL_TYPE, randomSubmission.getThumbnailType().toString());
+            cv.put(SubredditsContract.Submissions.POST_HINT, randomSubmission.getPostHint().toString());
+            cv.put(SubredditsContract.Submissions.PERMA_LINK, randomSubmission.getPermalink());
+            cv.put(SubredditsContract.Submissions.COMMENT_COUNT, randomSubmission.getCommentCount().toString());
+
+            // Submission comments
+            final int maxNumComments = 3;  // Limit the number of comments we store to this
+            final int maxCommentLen = 128; // Limit the comment length to this
+            int i = 0;
+            CommentNode commentNode = randomSubmission.getComments();
+            for (CommentNode comment : commentNode) {
+                if (i >= maxNumComments) {
+                    break;
+                }
+                // Let's store the first three of the top level comments
+                String commentText = comment.getComment().getBody();
+                if (!TextUtils.isEmpty(commentText)) {
+                    commentText = commentText.length() <= maxCommentLen ? commentText : commentText.substring(0, maxCommentLen);
+                    String commentField = i==0 ? SubredditsContract.Submissions.COMMENT_1 : i==1 ? SubredditsContract.Submissions.COMMENT_2 : SubredditsContract.Submissions.COMMENT_3;
+                    cv.put(commentField, commentText);
+                    i++;
+                }
+            }
+
+            // Save it!
+            getApplicationContext().getContentResolver().insert(
+                    SubredditsContract.Submissions.buildDirUri(), cv);
+        }
         return true;
     }
 }
