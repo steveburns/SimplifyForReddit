@@ -9,9 +9,182 @@
     tools:context="steveburns.com.simplifyforreddit.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PLACE SUBREDDIT POST VIEW HERE!!!" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/fragment_main_image"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            />
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Label"
+            android:text="@string/title_label"/>
+
+        <TextView
+            android:id="@+id/fragment_main_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PLACE SUBMISSION TITLE HERE"
+            style="@style/primary_text"
+            android:layout_marginTop="@dimen/layout_top_margin"
+            android:layout_marginBottom="@dimen/layout_bottom_margin"
+            />
+
+        <!-- Text -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Label"
+            android:text="@string/text_label"/>
+        <TextView
+            android:id="@+id/fragment_main_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PLACE SUBMISSION TEXT HERE"
+            style="@style/primary_text"
+            android:layout_marginTop="@dimen/layout_top_margin"
+            android:layout_marginBottom="@dimen/layout_bottom_margin"
+            />
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/layout_top_margin"
+            android:layout_marginBottom="@dimen/layout_bottom_margin"
+            >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                >
+                <!-- Author -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Label"
+                    android:text="@string/author_label"/>
+                <TextView
+                    android:id="@+id/fragment_main_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PLACE AUTHOR NAME HERE"
+                    style="@style/primary_text"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                >
+                <!-- Created -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Label"
+                    android:text="@string/created_label"/>
+                <TextView
+                    android:id="@+id/fragment_main_created"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PLACE CREATE DATE HERE"
+                    style="@style/primary_text"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                >
+                <!-- Subreddit -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Label"
+                    android:text="@string/subreddit_label"/>
+                <TextView
+                    android:id="@+id/fragment_main_subreddit_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PLACE SUBREDDIT NAME HERE"
+                    style="@style/primary_text"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Total comments -->
+        <TextView
+            android:id="@+id/fragment_main_total_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_comments_label"
+            android:layout_marginTop="@dimen/layout_top_margin"
+            android:layout_marginBottom="@dimen/layout_bottom_margin"
+            style="@style/primary_text"
+            />
+
+        <TextView
+            android:id="@+id/fragment_main_comment_label_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Label"
+            android:text="@string/comment_label"/>
+        <TextView
+            android:id="@+id/fragment_main_comment_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Put first comment here"
+            style="@style/primary_text"
+            android:layout_marginTop="@dimen/layout_top_margin"
+            android:layout_marginBottom="@dimen/layout_bottom_margin"
+            />
+
+        <TextView
+            android:id="@+id/fragment_main_comment_label_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Label"
+            android:text="@string/comment_label"/>
+        <TextView
+            android:id="@+id/fragment_main_comment2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Put second comment here"
+            style="@style/primary_text"
+            android:layout_marginTop="@dimen/layout_top_margin"
+            android:layout_marginBottom="@dimen/layout_bottom_margin"
+            />
+
+        <TextView
+            android:id="@+id/fragment_main_comment_label_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Label"
+            android:text="@string/comment_label"/>
+        <TextView
+            android:id="@+id/fragment_main_comment3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Put third comment here"
+            style="@style/primary_text"
+            android:layout_marginTop="@dimen/layout_top_margin"
+            android:layout_marginBottom="@dimen/layout_bottom_margin"
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>

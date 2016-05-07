@@ -5,4 +5,10 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="ColorPrimaryText">#212121</color>
+<!--
+    <color name="ColorLabel">#bebbb3</color>
+-->
+    <color name="ColorSecondaryText">#727272</color>
+
+    <color name="textColorLabel">@color/ColorSecondaryText</color>
 </resources>

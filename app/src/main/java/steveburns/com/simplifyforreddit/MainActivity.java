@@ -18,12 +18,25 @@ import steveburns.com.simplifyforreddit.data.UpdaterService;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private boolean mTwoPane = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Are we in tablet mode?
+        if(findViewById(R.id.fragment_subreddit_list_container) != null) {
+            mTwoPane = true;
+
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_subreddit_list_container, SubredditsListFragment.newInstance(1), "")
+                        .commit();
+            }
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         try {

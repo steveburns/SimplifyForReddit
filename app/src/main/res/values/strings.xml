@@ -5,4 +5,12 @@
 
     <string name="add_subreddit">Add Subreddit</string>
     <string name="remove_subreddit">Remove Subreddit: %s</string>
+
+    <string name="title_label">Title</string>
+    <string name="text_label">Text</string>
+    <string name="author_label">Author</string>
+    <string name="created_label">Created</string>
+    <string name="subreddit_label">Subreddit</string>
+    <string name="total_comments_label">%d total comments</string>
+    <string name="comment_label">Comment</string>
 </resources>
