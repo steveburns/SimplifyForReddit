@@ -1,19 +1,14 @@
 package steveburns.com.simplifyforreddit;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import steveburns.com.simplifyforreddit.data.UpdaterService;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -48,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
 */
 
-                    refresh();
+//                    refresh();
                 }
             });
         } catch(NullPointerException e) {
@@ -62,38 +57,6 @@ public class MainActivity extends AppCompatActivity {
 */
 
     }
-
-    private void refresh() {
-        Intent intent = new Intent(this, UpdaterService.class)
-            .setAction(UpdaterService.ACTION_GET_RANDOM_POSTS);
-        startService(intent);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        registerReceiver(mRefreshingReceiver,
-                new IntentFilter(UpdaterService.BROADCAST_ACTION_GET_RANDOM_POSTS));
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        unregisterReceiver(mRefreshingReceiver);
-    }
-
-    private BroadcastReceiver mRefreshingReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (UpdaterService.BROADCAST_ACTION_GET_RANDOM_POSTS.equals(intent.getAction())) {
-
-                Log.d(TAG, "Received broadcast: BROADCAST_ACTION_GET_RANDOM_POSTS");
-                updateRefreshingUI();
-            }
-        }
-    };
-
-    private void updateRefreshingUI() { }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -43,6 +43,7 @@
 
             <!-- Text -->
             <TextView
+                android:id="@+id/fragment_main_text_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/Label"
@@ -164,7 +165,7 @@
                 style="@style/Label"
                 android:text="@string/comment_label"/>
             <TextView
-                android:id="@+id/fragment_main_comment2"
+                android:id="@+id/fragment_main_comment_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Put second comment here"
@@ -180,7 +181,7 @@
                 style="@style/Label"
                 android:text="@string/comment_label"/>
             <TextView
-                android:id="@+id/fragment_main_comment3"
+                android:id="@+id/fragment_main_comment_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Put third comment here"
