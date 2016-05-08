@@ -22,10 +22,24 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        /*
+        This might be the way to implement the swipe action:
+        - Also add the main fragment using a transaction like we already do with the subreddit fragment for two pane mode.
+        - When the user swipes, use a new instance of the main fragment to replace the old fragment.
+         */
+
+        // Okay, create the main fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_main_container, new MainActivityFragment(), "")
+                .commit();
+
+
         // Are we in tablet mode?
         if(findViewById(R.id.fragment_subreddit_list_container) != null) {
             mTwoPane = true;
             if (savedInstanceState == null) {
+                // tablet mode also shows the list of subreddits.
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_subreddit_list_container, SubredditsListFragment.newInstance(1), "")
                         .commit();

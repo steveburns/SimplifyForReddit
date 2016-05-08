@@ -12,7 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import steveburns.com.simplifyforreddit.data.SubredditsContract;
 import steveburns.com.simplifyforreddit.data.UpdaterService;
@@ -79,6 +82,25 @@ public class MainActivityFragment extends Fragment {
      * Bind values at current cursor location to UI
      */
     private void bindSubmissionToUi(Cursor cursor, View view) {
+
+        // The URL is the link to the Reddit article or some other internet site...
+        // TODO: This needs to be used to make the intent to display the web content
+        String url = cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.URL));
+
+
+        // Image
+        String thumbnail = cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.THUMBNAIL));
+        String thumbnailType = cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.THUMBNAIL_TYPE));
+        if (!TextUtils.isEmpty(thumbnail) && !TextUtils.isEmpty(thumbnailType) && "url".equals(thumbnailType.toLowerCase())) {
+            ImageView imageView = (ImageView) view.findViewById(R.id.fragment_main_image);
+            imageView.setVisibility(View.VISIBLE);
+            Picasso.with(this.getContext())
+                    .load(thumbnail)
+                    .into(imageView);
+        } else {
+            view.findViewById(R.id.fragment_main_image).setVisibility(View.GONE);
+        }
+
         // Title
         TextView titleView = (TextView) view.findViewById(R.id.fragment_main_title);
         titleView.setText(cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.TITLE)));
@@ -118,8 +140,8 @@ public class MainActivityFragment extends Fragment {
             commentView.setVisibility(View.VISIBLE);
             commentView.setText(comment1);
         } else {
-            view.findViewById(R.id.fragment_main_comment_label_1).setVisibility(View.INVISIBLE);
-            view.findViewById(R.id.fragment_main_comment_1).setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.fragment_main_comment_label_1).setVisibility(View.GONE);
+            view.findViewById(R.id.fragment_main_comment_1).setVisibility(View.GONE);
         }
 
         // Comment 2
@@ -130,8 +152,8 @@ public class MainActivityFragment extends Fragment {
             commentView.setVisibility(View.VISIBLE);
             commentView.setText(comment2);
         } else {
-            view.findViewById(R.id.fragment_main_comment_label_2).setVisibility(View.INVISIBLE);
-            view.findViewById(R.id.fragment_main_comment_2).setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.fragment_main_comment_label_2).setVisibility(View.GONE);
+            view.findViewById(R.id.fragment_main_comment_2).setVisibility(View.GONE);
         }
 
         // Comment 3
@@ -142,8 +164,8 @@ public class MainActivityFragment extends Fragment {
             commentView.setVisibility(View.VISIBLE);
             commentView.setText(comment3);
         } else {
-            view.findViewById(R.id.fragment_main_comment_label_3).setVisibility(View.INVISIBLE);
-            view.findViewById(R.id.fragment_main_comment_3).setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.fragment_main_comment_label_3).setVisibility(View.GONE);
+            view.findViewById(R.id.fragment_main_comment_3).setVisibility(View.GONE);
         }
     }
 
