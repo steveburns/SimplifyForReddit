@@ -3,6 +3,7 @@ package steveburns.com.simplifyforreddit;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -14,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private boolean mTwoPane = false;
+    private ViewPager mViewPager;
+    private SubmissionsPagerAdapter mSubmissionsPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         /*
         This might be the way to implement the swipe action:
         - Also add the main fragment using a transaction like we already do with the subreddit fragment for two pane mode.
@@ -30,10 +32,13 @@ public class MainActivity extends AppCompatActivity {
          */
 
         // Okay, create the main fragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_main_container, new MainActivityFragment(), "")
-                .commit();
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.fragment_main_container, new MainActivityFragment(), "")
+//                .commit();
 
+        mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mSubmissionsPagerAdapter = new SubmissionsPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mSubmissionsPagerAdapter);
 
         // Are we in tablet mode?
         if(findViewById(R.id.fragment_subreddit_list_container) != null) {
