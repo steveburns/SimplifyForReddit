@@ -144,6 +144,10 @@ public class UpdaterService extends IntentService {
     private boolean storeRandomSubmissionForSubreddit(Long id, String subredditName) {
 
         Submission randomSubmission = RedditData.getSubredditSubmission(subredditName);
+        if (randomSubmission == null) {
+            return false;
+        }
+
         if (randomSubmission.isNsfw()) {
             // We lazily allow the user to add new subreddits to the app without checking
             //   if they are safe for work. That means one of these randomly selected ones
