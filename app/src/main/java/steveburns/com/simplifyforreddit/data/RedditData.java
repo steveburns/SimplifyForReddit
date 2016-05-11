@@ -45,6 +45,8 @@ public class RedditData {
 
     private static RedditClient getAuthorizedClient(boolean forceRenewal) {
 
+        Log.d(TAG, String.format("In getAuthorizedClient, thread = %d", Thread.currentThread().getId()));
+
         // If we're not forcing a renewal and we already have a client assume it's gonna work.
         if (!forceRenewal && mRedditClient != null) {
             return mRedditClient;
@@ -86,7 +88,10 @@ public class RedditData {
         for(int attempt = 1; attempt <= maxAttempts && subredditSubmission == null; attempt++) {
             try {
                 // force the auth renewal if we're past the first attempt
-                subredditSubmission = getAuthorizedClient(attempt > 1).getRandomSubmission(subredditName);
+                RedditClient client = getAuthorizedClient(attempt > 1);
+                if (client != null) {
+                    subredditSubmission = client.getRandomSubmission(subredditName);
+                }
             } catch (RuntimeException e) {
                 Log.d(TAG, e.toString());
             }

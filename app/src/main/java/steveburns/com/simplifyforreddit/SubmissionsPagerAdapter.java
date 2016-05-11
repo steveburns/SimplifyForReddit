@@ -2,14 +2,14 @@ package steveburns.com.simplifyforreddit;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 import android.view.ViewGroup;
 
 /**
  * Created by sburns on 5/10/16.
  */
-public class SubmissionsPagerAdapter extends FragmentPagerAdapter {
+public class SubmissionsPagerAdapter extends FragmentStatePagerAdapter {
 
     private static final String TAG = SubmissionsPagerAdapter.class.getSimpleName();
 
@@ -33,6 +33,9 @@ public class SubmissionsPagerAdapter extends FragmentPagerAdapter {
         * Might have to use FragmentStatePagerAdapter:
         *
         *
+        * General, simple ViewPager example:
+        * http://developer.android.com/reference/android/support/v4/view/ViewPager.html
+        *
         * */
     public SubmissionsPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -43,7 +46,6 @@ public class SubmissionsPagerAdapter extends FragmentPagerAdapter {
      */
     @Override
     public int getCount() {
-        Log.d(TAG, "getCount called");
         return Integer.MAX_VALUE;
     }
 

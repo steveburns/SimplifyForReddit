@@ -88,7 +88,7 @@ public class UpdaterService extends IntentService {
         }
     }
 
-    private int getRandomSubmissions(int numToGet) {
+    private synchronized int getRandomSubmissions(int numToGet) {
         int numStored = 0;
         Cursor cursor = null;
         try {
@@ -126,7 +126,7 @@ public class UpdaterService extends IntentService {
                 double randomValue = Math.random();
                 int pos = (int)Math.round (randomValue * (subreddits.size()-1));
                 if (pos >= 0 && pos < subreddits.size()) {
-                    Log.d(TAG, String.format("Ramdomly selected subreddit: %s", subreddits.get(pos)));
+                    Log.d(TAG, String.format("Ramdomly selected subreddit: %s", subreddits.get(pos).second));
                     if(storeRandomSubmissionForSubreddit(subreddits.get(pos).first, subreddits.get(pos).second)) {
                         numStored++;
                     }
