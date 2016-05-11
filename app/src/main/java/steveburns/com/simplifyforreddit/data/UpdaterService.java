@@ -162,6 +162,7 @@ public class UpdaterService extends IntentService {
         ContentValues cv = new ContentValues();
         SimpleDateFormat formatter = new SimpleDateFormat("d MMM yyyy");
 
+        cv.put(SubredditsContract.Submissions.VIEWED, 0);
         cv.put(SubredditsContract.Submissions.SUBREDDIT_NAME, randomSubmission.getSubredditName());
         cv.put(SubredditsContract.Submissions.TITLE, randomSubmission.getTitle().trim());
         cv.put(SubredditsContract.Submissions.AUTHOR, randomSubmission.getAuthor());

@@ -42,6 +42,7 @@ public class SubredditsContract {
 
     interface SubmissionColumns {
         String _ID = "_id";
+        String VIEWED = "viewed";
         String SUBREDDIT_NAME = "subreddit_name";
         String TITLE = "title";
         String AUTHOR = "author";

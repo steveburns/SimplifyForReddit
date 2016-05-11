@@ -1,6 +1,7 @@
 package steveburns.com.simplifyforreddit;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -26,57 +27,61 @@ import steveburns.com.simplifyforreddit.data.UpdaterService;
 public class MainActivityFragment extends Fragment {
 
     private static final String TAG = MainActivityFragment.class.getSimpleName();
-    private static final int GET_MORE_SUBMISSIONS_IF_BELOW = 3;
-    private static Long mSubmissionId = null; // ID of the most recently loaded submission
-    private static boolean mIsRequestingSubmissions = false;
+    private static final String BUNDLE_SUBMISSION_ID = "Bundle_Submission_id";
+    private static final int GET_MORE_SUBMISSIONS_IF_BELOW = 4;
+
+    private long mSubmissionId = 0; // ID of the most recently loaded submission
+//    private static boolean mIsRequestingSubmissions = false;
 
     public MainActivityFragment() {
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(BUNDLE_SUBMISSION_ID, mSubmissionId);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        /*
-        There are flaws in this logic because the ViewPager loads the next page while the current
-        one is being displayed (basically, when the app starts up it loads the first two pages).
-        The problem is that we're assuming mSubmissionId is the ID of the currently displayed submission
-        and it's not.
-        Perhaps there's some way for us to deposit the submissionId into each of the views when
-        they get created.
-         */
-
-
-        View view = null;
-        if (savedInstanceState != null && mSubmissionId != null) {
+        View view;
+        if (savedInstanceState != null) {
+            mSubmissionId = savedInstanceState.getLong(BUNDLE_SUBMISSION_ID);
             Log.d(TAG, "savedInstanceState != null. Reload CURRENT submission");
             view = ReloadCurrentSubmission(inflater, container);
-        }
-
-        // Don't have a view yet so let's try to load the next locally stored submission.
-        if (view == null) {
+            if (view == null) {
+                TextView textView = new TextView(getContext());
+                textView.setText("Cannot reload submission. The data has been removed from the app.");
+                view = textView;
+            }
+        } else {
+            // Load the next locally stored submission.
             Log.d(TAG, "savedInstanceState == null. Loading NEXT submission");
             view = LoadNextSubmission(inflater, container);
-        }
 
-        // Still don't have a view so we must not have any locally stored submissions... yet!
-        if (view == null) {
+            // Still don't have a view so we must not have any locally stored submissions... yet!
+            if (view == null) {
 
-            // Is this the very first time the user has run the app?
-            if (false /* TODO: check a preference to see if this is the first time and then show a view that gives instructions */) {
+                // Is this the very first time the user has run the app?
+                if (false /* TODO: check a preference to see if this is the first time and then show a view that gives instructions */) {
 
-                // TODO: set preference so we know it's not the first time.
-            } else {
+                    // TODO: set preference so we know it's not the first time.
+                    TextView textView = new TextView(getContext());
+                    textView.setText("First time running the app. Swipe left. Fetching data... Please wait");
+                    view = textView;
+                } else {
 
-                Log.d(TAG, "Don't have any data. TODO: load 'waiting' view.");
-                // Load a view that shows the user we are trying to load more data
-                // TODO: build an empty view and load it here
+                    Log.d(TAG, "Don't have any data. TODO: load 'waiting' view.");
+                    // Load a view that shows the user we are trying to load more data
+                    // TODO: build an empty view and load it here
 //                view = inflater.inflate(R.layout.fragment_main, container, false);
 
-                TextView textView = new TextView(getContext());
-                textView.setText("Fetching data... Please wait");
-
-                view = textView;
+                    TextView textView = new TextView(getContext());
+                    textView.setText("Fetching data... Please wait");
+                    view = textView;
+                }
             }
         }
 
@@ -110,40 +115,32 @@ public class MainActivityFragment extends Fragment {
 
         View view = null;
         int numRemainingSubmissions = 0;
-        Long submissionIdToDelete = null;
+        long foundSubmissionId = 0;
 
         Cursor cursor = getContext().getContentResolver().query(SubredditsContract.Submissions.buildDirUri(),
                 new String[]{"*"}, null, null, SubredditsContract.Submissions.DEFAULT_SORT);
         if (cursor != null) {
             if (cursor.moveToFirst()) {
-
-                boolean haveData = true;
-                Long submissionId = cursor.getLong(cursor.getColumnIndex(SubredditsContract.Submissions._ID));
-                if (submissionId.equals(mSubmissionId)) {
-                    // We've already shown this one so move to the next one.
-                    submissionIdToDelete = submissionId;
-                    haveData = cursor.moveToNext();
-                }
-
-                if (haveData) {
-                    view = inflater.inflate(R.layout.fragment_main, container, false);
-                    // Remember this submissionId in case we need to reload it.
-                    mSubmissionId = cursor.getLong(cursor.getColumnIndex(SubredditsContract.Submissions._ID));
-                    bindSubmissionToUi(cursor, view);
-                }
-
-                while (cursor.moveToNext()) {
-                    // let's determine how many remaining submissions we have locally so we can decide
-                    //   whether or not to request more.
-                    numRemainingSubmissions++;
-                }
+                do {
+                    Long viewed = cursor.getLong(cursor.getColumnIndex(SubredditsContract.Submissions.VIEWED));
+                    if (foundSubmissionId > 0) {
+                        numRemainingSubmissions++;
+                    } else if (viewed == 0) {
+                        foundSubmissionId = cursor.getLong(cursor.getColumnIndex(SubredditsContract.Submissions._ID));
+                        view = inflater.inflate(R.layout.fragment_main, container, false);
+                        bindSubmissionToUi(cursor, view);
+                        mSubmissionId = foundSubmissionId;
+                    }
+                } while (cursor.moveToNext());
             }
             cursor.close();
         }
 
-        if (submissionIdToDelete != null) {
-            // remove this one from the local storage
-            getContext().getContentResolver().delete(SubredditsContract.Submissions.buildItemUri(submissionIdToDelete), null, null);
+        if (foundSubmissionId > 0) {
+            // update storage so we know this submission has already been viewed.
+            ContentValues cv = new ContentValues(1);
+            cv.put(SubredditsContract.Submissions.VIEWED, 1);
+            getContext().getContentResolver().update(SubredditsContract.Submissions.buildItemUri(foundSubmissionId), cv, null, null);
         }
 
         // request more submissions from the server if we don't have many remaining
@@ -272,12 +269,12 @@ public class MainActivityFragment extends Fragment {
      */
     private void requestMoreSubmissions() {
 
-        if (!mIsRequestingSubmissions) {
-            mIsRequestingSubmissions = true;
+//        if (!mIsRequestingSubmissions) {
+//            mIsRequestingSubmissions = true;
             Intent intent = new Intent(getActivity(), UpdaterService.class)
                     .setAction(UpdaterService.ACTION_GET_RANDOM_SUBMISSIONS);
             getActivity().startService(intent);
-        }
+//        }
     }
 
     private BroadcastReceiver mRefreshingReceiver = new BroadcastReceiver() {
@@ -285,10 +282,9 @@ public class MainActivityFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             if (UpdaterService.BROADCAST_ACTION_GET_RANDOM_SUBMISSIONS.equals(intent.getAction())) {
 
-                mIsRequestingSubmissions = false;
-                Log.d(TAG, "Received broadcast: BROADCAST_ACTION_GET_RANDOM_POSTS");
+//                mIsRequestingSubmissions = false;
                 updateRefreshingUI();
-                Log.d(TAG, String.format("Local submissions: %d", countLocalSubmissions()));
+                Log.d(TAG, String.format("Received broadcast: BROADCAST_ACTION_GET_RANDOM_POSTS, Local submissions: %d", countLocalSubmissions()));
             }
         }
     };

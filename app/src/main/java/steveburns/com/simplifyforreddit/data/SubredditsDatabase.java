@@ -34,6 +34,7 @@ public class SubredditsDatabase extends SQLiteOpenHelper {
         /* Submissions */
         db.execSQL("CREATE TABLE " + Tables.SUBMISSIONS + " ("
                 + SubredditsContract.SubmissionColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + SubredditsContract.SubmissionColumns.VIEWED + " INTEGER NOT NULL, "
                 + SubredditsContract.SubmissionColumns.SUBREDDIT_NAME + " TEXT NOT NULL, "
                 + SubredditsContract.SubmissionColumns.TITLE + " TEXT NULL, "
                 + SubredditsContract.SubmissionColumns.AUTHOR + " TEXT NULL, "
