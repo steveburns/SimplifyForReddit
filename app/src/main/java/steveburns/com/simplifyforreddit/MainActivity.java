@@ -45,8 +45,14 @@ public class MainActivity extends AppCompatActivity {
             mTwoPane = true;
             if (savedInstanceState == null) {
                 // tablet mode also shows the list of subreddits.
+/*
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_subreddit_list_container, SubredditsListFragment.newInstance(1), "")
+                        .commit();
+*/
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_subreddit_list_container, new SubredditsListFragmentSimple(), "")
                         .commit();
             }
         }
