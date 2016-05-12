@@ -33,7 +33,6 @@ public class MainActivityFragment extends Fragment {
     private static final int GET_MORE_SUBMISSIONS_IF_BELOW = 4;
 
     private long mSubmissionId = 0; // ID of the most recently loaded submission
-//    private static boolean mIsRequestingSubmissions = false;
 
     public MainActivityFragment() {
     }
@@ -140,6 +139,19 @@ public class MainActivityFragment extends Fragment {
      */
     private void bindSubmissionToUi(Cursor cursor, View view) {
 
+        View.OnClickListener clickListener = null;
+        final String url = cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.URL));
+        if (!TextUtils.isEmpty(url)) {
+            clickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(url));
+                    startActivity(intent);
+                }
+            };
+        }
+
         // Image
         String thumbnail = cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.THUMBNAIL));
         String thumbnailType = cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.THUMBNAIL_TYPE));
@@ -149,26 +161,20 @@ public class MainActivityFragment extends Fragment {
             Picasso.with(this.getContext())
                     .load(thumbnail)
                     .into(imageView);
+            if (clickListener != null) {
+                imageView.setOnClickListener(clickListener);
+            }
         } else {
             view.findViewById(R.id.fragment_main_image).setVisibility(View.GONE);
         }
 
         // Title
         String titleText = cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.TITLE));
-        final String url = cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.URL));
         TextView titleView = (TextView) view.findViewById(R.id.fragment_main_title);
         TextView moreView = (TextView) view.findViewById(R.id.fragment_main_more);
-        if (!TextUtils.isEmpty(url)) {
-            View.OnClickListener listener = new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(url));
-                    startActivity(intent);
-                }
-            };
-            titleView.setOnClickListener(listener);
-            moreView.setOnClickListener(listener);
+        if (clickListener != null) {
+            titleView.setOnClickListener(clickListener);
+            moreView.setOnClickListener(clickListener);
             moreView.setVisibility(View.VISIBLE);
         } else {
             moreView.setVisibility(View.GONE);
@@ -264,23 +270,17 @@ public class MainActivityFragment extends Fragment {
      * Call this method to get more random posts from the server
      */
     private void requestMoreSubmissions() {
-
-//        if (!mIsRequestingSubmissions) {
-//            mIsRequestingSubmissions = true;
-            Intent intent = new Intent(getActivity(), UpdaterService.class)
-                    .setAction(UpdaterService.ACTION_GET_RANDOM_SUBMISSIONS);
-            getActivity().startService(intent);
-//        }
+        Intent intent = new Intent(getActivity(), UpdaterService.class)
+                .setAction(UpdaterService.ACTION_GET_RANDOM_SUBMISSIONS);
+        getActivity().startService(intent);
     }
 
     private BroadcastReceiver mRefreshingReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (UpdaterService.BROADCAST_ACTION_GET_RANDOM_SUBMISSIONS.equals(intent.getAction())) {
-
-//                mIsRequestingSubmissions = false;
                 updateRefreshingUI();
-                Log.d(TAG, String.format("Received broadcast: BROADCAST_ACTION_GET_RANDOM_POSTS, Local submissions: %d", countLocalSubmissions()));
+//                Log.d(TAG, String.format("Received broadcast: BROADCAST_ACTION_GET_RANDOM_POSTS, Local submissions: %d", countLocalSubmissions()));
             }
         }
     };
@@ -308,8 +308,8 @@ public class MainActivityFragment extends Fragment {
             View view = this.getView();
             if (view != null) {
                 if (view.findViewById(R.id.fragment_loading_message) != null) {
-                    Log.d(TAG, "Swap the view out here!!!");
 
+                    // Reload the fragment and it will automatically load the data.
                     getFragmentManager().beginTransaction()
                             .detach(this)
                             .attach(this)
