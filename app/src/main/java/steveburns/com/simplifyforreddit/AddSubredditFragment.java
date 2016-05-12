@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -27,9 +26,13 @@ import steveburns.com.simplifyforreddit.data.SubredditsContract;
  * create an instance of this fragment.
  */
 public class AddSubredditFragment extends DialogFragment {
+    private Action mPostAction;
 
     public AddSubredditFragment() {
-        // Required empty public constructor
+    }
+
+    public void setPostAction(Action action) {
+        mPostAction = action;
     }
 
     /**
@@ -74,6 +77,7 @@ public class AddSubredditFragment extends DialogFragment {
                             ContentValues cv = new ContentValues();
                             cv.put(SubredditsContract.Subreddits.NAME, subredditName);
                             getContext().getContentResolver().insert(SubredditsContract.Subreddits.buildDirUri(), cv);
+                            mPostAction.execute();
                         }
                     }
                 })
@@ -88,8 +92,10 @@ public class AddSubredditFragment extends DialogFragment {
      *
      * @return A new instance of fragment AddSubredditFragment.
      */
-    public static AddSubredditFragment newInstance() {
-        return new AddSubredditFragment();
+    public static AddSubredditFragment newInstance(Action action) {
+        AddSubredditFragment fragment = new AddSubredditFragment();
+        fragment.setPostAction(action);
+        return fragment;
     }
 
     @Override
