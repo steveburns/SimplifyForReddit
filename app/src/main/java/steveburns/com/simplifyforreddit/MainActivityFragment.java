@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,12 +46,11 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedState) {
 
         View view;
-        if (savedInstanceState != null) {
-            mSubmissionId = savedInstanceState.getLong(BUNDLE_SUBMISSION_ID);
-            Log.d(TAG, "savedInstanceState != null. Reload CURRENT submission");
+        if (savedState != null && (mSubmissionId = savedState.getLong(BUNDLE_SUBMISSION_ID)) > 0) {
+            Log.d(TAG, "savedState != null. Reload CURRENT submission");
             view = ReloadCurrentSubmission(inflater, container);
             if (view == null) {
                 TextView textView = new TextView(getContext());
@@ -58,30 +59,12 @@ public class MainActivityFragment extends Fragment {
             }
         } else {
             // Load the next locally stored submission.
-            Log.d(TAG, "savedInstanceState == null. Loading NEXT submission");
+            Log.d(TAG, "savedState == null. Loading NEXT submission");
             view = LoadNextSubmission(inflater, container);
 
-            // Still don't have a view so we must not have any locally stored submissions... yet!
+            // Don't have a view so we must not have any locally stored submissions... yet!
             if (view == null) {
-
-                // Is this the very first time the user has run the app?
-                if (false /* TODO: check a preference to see if this is the first time and then show a view that gives instructions */) {
-
-                    // TODO: set preference so we know it's not the first time.
-                    TextView textView = new TextView(getContext());
-                    textView.setText("First time running the app. Swipe left. Fetching data... Please wait");
-                    view = textView;
-                } else {
-
-                    Log.d(TAG, "Don't have any data. TODO: load 'waiting' view.");
-                    // Load a view that shows the user we are trying to load more data
-                    // TODO: build an empty view and load it here
-//                view = inflater.inflate(R.layout.fragment_main, container, false);
-
-                    TextView textView = new TextView(getContext());
-                    textView.setText("Fetching data... Please wait");
-                    view = textView;
-                }
+                view = inflater.inflate(R.layout.loading_data, container, false);
             }
         }
 
@@ -157,11 +140,6 @@ public class MainActivityFragment extends Fragment {
      */
     private void bindSubmissionToUi(Cursor cursor, View view) {
 
-        // The URL is the link to the Reddit article or some other internet site...
-        // TODO: This needs to be used to make the intent to display the web content
-        String url = cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.URL));
-
-
         // Image
         String thumbnail = cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.THUMBNAIL));
         String thumbnailType = cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.THUMBNAIL_TYPE));
@@ -176,8 +154,26 @@ public class MainActivityFragment extends Fragment {
         }
 
         // Title
+        String titleText = cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.TITLE));
+        final String url = cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.URL));
         TextView titleView = (TextView) view.findViewById(R.id.fragment_main_title);
-        titleView.setText(cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.TITLE)));
+        TextView moreView = (TextView) view.findViewById(R.id.fragment_main_more);
+        if (!TextUtils.isEmpty(url)) {
+            View.OnClickListener listener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(url));
+                    startActivity(intent);
+                }
+            };
+            titleView.setOnClickListener(listener);
+            moreView.setOnClickListener(listener);
+            moreView.setVisibility(View.VISIBLE);
+        } else {
+            moreView.setVisibility(View.GONE);
+        }
+        titleView.setText(Html.fromHtml(titleText));
 
         // Text
         String selfText = cursor.getString(cursor.getColumnIndex(SubredditsContract.Submissions.SELF_TEXT));
@@ -185,7 +181,7 @@ public class MainActivityFragment extends Fragment {
             view.findViewById(R.id.fragment_main_text_label).setVisibility(View.VISIBLE);
             TextView selfTextView = (TextView) view.findViewById(R.id.fragment_main_text);
             selfTextView.setVisibility(View.VISIBLE);
-            selfTextView.setText(selfText);
+            selfTextView.setText(Html.fromHtml(selfText));
         } else {
             view.findViewById(R.id.fragment_main_text).setVisibility(View.GONE);
             view.findViewById(R.id.fragment_main_text_label).setVisibility(View.GONE);
@@ -212,7 +208,7 @@ public class MainActivityFragment extends Fragment {
             view.findViewById(R.id.fragment_main_comment_label_1).setVisibility(View.VISIBLE);
             TextView commentView = (TextView) view.findViewById(R.id.fragment_main_comment_1);
             commentView.setVisibility(View.VISIBLE);
-            commentView.setText(comment1);
+            commentView.setText(Html.fromHtml(comment1));
         } else {
             view.findViewById(R.id.fragment_main_comment_label_1).setVisibility(View.GONE);
             view.findViewById(R.id.fragment_main_comment_1).setVisibility(View.GONE);
@@ -224,7 +220,7 @@ public class MainActivityFragment extends Fragment {
             view.findViewById(R.id.fragment_main_comment_label_2).setVisibility(View.VISIBLE);
             TextView commentView = (TextView) view.findViewById(R.id.fragment_main_comment_2);
             commentView.setVisibility(View.VISIBLE);
-            commentView.setText(comment2);
+            commentView.setText(Html.fromHtml(comment2));
         } else {
             view.findViewById(R.id.fragment_main_comment_label_2).setVisibility(View.GONE);
             view.findViewById(R.id.fragment_main_comment_2).setVisibility(View.GONE);
@@ -236,7 +232,7 @@ public class MainActivityFragment extends Fragment {
             view.findViewById(R.id.fragment_main_comment_label_3).setVisibility(View.VISIBLE);
             TextView commentView = (TextView) view.findViewById(R.id.fragment_main_comment_3);
             commentView.setVisibility(View.VISIBLE);
-            commentView.setText(comment3);
+            commentView.setText(Html.fromHtml(comment3));
         } else {
             view.findViewById(R.id.fragment_main_comment_label_3).setVisibility(View.GONE);
             view.findViewById(R.id.fragment_main_comment_3).setVisibility(View.GONE);
@@ -306,6 +302,21 @@ public class MainActivityFragment extends Fragment {
         return num;
     }
 
-    private void updateRefreshingUI() { }
+    static final Object sync = new Object();
+    private void updateRefreshingUI() {
+        synchronized(sync) {
+            View view = this.getView();
+            if (view != null) {
+                if (view.findViewById(R.id.fragment_loading_message) != null) {
+                    Log.d(TAG, "Swap the view out here!!!");
+
+                    getFragmentManager().beginTransaction()
+                            .detach(this)
+                            .attach(this)
+                            .commit();
+                }
+            }
+        }
+    }
 
 }

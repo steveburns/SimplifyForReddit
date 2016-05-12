@@ -45,8 +45,6 @@ public class RedditData {
 
     private static RedditClient getAuthorizedClient(boolean forceRenewal) {
 
-        Log.d(TAG, String.format("In getAuthorizedClient, thread = %d", Thread.currentThread().getId()));
-
         // If we're not forcing a renewal and we already have a client assume it's gonna work.
         if (!forceRenewal && mRedditClient != null) {
             return mRedditClient;

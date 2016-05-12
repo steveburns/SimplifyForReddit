@@ -27,4 +27,9 @@
         <item name="android:textSize">@dimen/text_size_medium</item>
     </style>
 
+    <style name="primary_large_text">
+        <item name="android:textColor">@color/ColorPrimaryText</item>
+        <item name="android:textSize">@dimen/text_size_xlarge</item>
+    </style>
+
 </resources>

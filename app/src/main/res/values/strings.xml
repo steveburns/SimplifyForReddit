@@ -13,4 +13,7 @@
     <string name="subreddit_label">Subreddit</string>
     <string name="total_comments_label">%s total comments</string>
     <string name="comment_label">Comment</string>
+
+    <string name="read_more">Read more >></string>
+    <string name="loading_please_wait">Loading data. Please wait.</string>
 </resources>

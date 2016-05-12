@@ -40,6 +40,13 @@
                 android:text="PLACE SUBMISSION TITLE HERE"
                 style="@style/primary_text"
                 android:layout_marginTop="@dimen/layout_top_margin"
+                />
+            <TextView
+                android:id="@+id/fragment_main_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/read_more"
+                style="@style/primary_text"
                 android:layout_marginBottom="@dimen/layout_bottom_margin"
                 />
 
