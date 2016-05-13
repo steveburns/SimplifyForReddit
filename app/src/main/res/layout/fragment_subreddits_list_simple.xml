@@ -4,9 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context="steveburns.com.simplifyforreddit.SubredditsListFragmentSimple">
 
+<!--
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context="steveburns.com.simplifyforreddit.SubredditsListFragmentSimple">
+-->
+
+<!--
+<LinearLayout
+    >
+-->
 
     <ListView
         android:layout_width="match_parent"
@@ -22,4 +35,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_input_add" />
 
+<!--
+    </LinearLayout>
+-->
 </android.support.design.widget.CoordinatorLayout>

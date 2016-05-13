@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SimplifyForReddit</string>
+    <string name="app_name">Simplify For Reddit</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_subreddits">SubredditsActivity</string>
 
@@ -16,4 +16,6 @@
 
     <string name="read_more">Read more >></string>
     <string name="loading_please_wait">Loading data. Please wait.</string>
+
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 </resources>
