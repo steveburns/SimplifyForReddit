@@ -5,6 +5,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,15 +26,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".data.UpdaterService"
-            android:exported="false" />
-
-        <provider
-            android:name=".data.SubredditsProvider"
-            android:authorities="steveburns.com.simplifyforreddit"
-            android:exported="false" />
-
         <activity
             android:name=".SubredditsListActivity"
             android:label="@string/title_activity_subreddits"
@@ -40,6 +35,26 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="steveburns.com.simplifyforreddit.MainActivity" />
         </activity>
+
+        <service
+            android:name=".data.UpdaterService"
+            android:exported="false" />
+
+        <provider
+            android:name=".data.SubredditsProvider"
+            android:authorities="steveburns.com.simplifyforreddit"
+            android:exported="false" />
+
+        <receiver android:name=".simplifyForRedditWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/simplify_for_reddit_appwidget_info"
+                />
+        </receiver>
+
     </application>
 
 </manifest>

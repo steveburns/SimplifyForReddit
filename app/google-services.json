@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "804333407634",
+    "project_id": "simplify-for-reddit-6294b"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:804333407634:android:f6a100056f05b8ab",
+        "android_client_info": {
+          "package_name": "steveburns.com.simplifyforreddit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "804333407634-0lmpggjsj44s9qihcksnkscnsl7mpakf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "steveburns.com.simplifyforreddit",
+            "certificate_hash": "118C9615CC2BEC5773122D6DE34EF599BF3F5AFE"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDygP8Ks76pbq892pNinmA6E_QM5pDa_O8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

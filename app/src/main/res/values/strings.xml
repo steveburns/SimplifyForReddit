@@ -13,9 +13,10 @@
     <string name="subreddit_label">Subreddit</string>
     <string name="total_comments_label">%s total comments</string>
     <string name="comment_label">Comment</string>
+    <string name="submission_title">Submission Title</string>
 
     <string name="read_more">Read more >></string>
-    <string name="loading_please_wait">Loading data. Please wait.</string>
+    <string name="loading_please_wait">Fetching Reddit submissions, Please wait.</string>
 
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

@@ -32,7 +32,7 @@ public class MainActivityFragment extends Fragment {
 
     private static final String TAG = MainActivityFragment.class.getSimpleName();
     private static final String BUNDLE_SUBMISSION_ID = "Bundle_Submission_id";
-    private static final int GET_MORE_SUBMISSIONS_IF_BELOW = 4;
+    private static final int GET_MORE_SUBMISSIONS_IF_BELOW = 5;
 
     private long mSubmissionId = 0; // ID of the most recently loaded submission
 
@@ -49,7 +49,7 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedState) {
 
-        View view;
+        View view = null;
         if (savedState != null && (mSubmissionId = savedState.getLong(BUNDLE_SUBMISSION_ID)) > 0) {
             Log.d(TAG, "savedState != null. Reload CURRENT submission");
             view = ReloadCurrentSubmission(inflater, container);
@@ -116,21 +116,27 @@ public class MainActivityFragment extends Fragment {
 
         Cursor cursor = getContext().getContentResolver().query(SubredditsContract.Submissions.buildDirUri(),
                 new String[]{"*"}, null, null, SubredditsContract.Submissions.DEFAULT_SORT);
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
-                    Long viewed = cursor.getLong(cursor.getColumnIndex(SubredditsContract.Submissions.VIEWED));
-                    if (foundSubmissionId > 0) {
-                        numRemainingSubmissions++;
-                    } else if (viewed == 0) {
-                        foundSubmissionId = cursor.getLong(cursor.getColumnIndex(SubredditsContract.Submissions._ID));
-                        view = inflater.inflate(R.layout.fragment_main, container, false);
-                        bindSubmissionToUi(cursor, view);
-                        mSubmissionId = foundSubmissionId;
-                    }
-                } while (cursor.moveToNext());
+        try {
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    do {
+                        Long viewed = cursor.getLong(cursor.getColumnIndex(SubredditsContract.Submissions.VIEWED));
+                        if (foundSubmissionId > 0) {
+                            numRemainingSubmissions++;
+                        } else if (viewed == 0) {
+                            foundSubmissionId = cursor.getLong(cursor.getColumnIndex(SubredditsContract.Submissions._ID));
+                            view = inflater.inflate(R.layout.fragment_main, container, false);
+                            bindSubmissionToUi(cursor, view);
+                            mSubmissionId = foundSubmissionId;
+                        }
+                    } while (cursor.moveToNext());
+                }
             }
-            cursor.close();
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
 
         if (foundSubmissionId > 0) {
