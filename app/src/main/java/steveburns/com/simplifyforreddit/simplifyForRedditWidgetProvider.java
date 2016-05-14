@@ -13,13 +13,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import org.w3c.dom.Text;
-
 import steveburns.com.simplifyforreddit.data.SubredditsContract;
 import steveburns.com.simplifyforreddit.data.UpdaterService;
 
 /**
- * Created by sburns on 5/14/16.
+ * Created by sburns.
  */
 public class simplifyForRedditWidgetProvider extends AppWidgetProvider {
 

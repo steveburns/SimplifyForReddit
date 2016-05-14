@@ -14,8 +14,6 @@ public class SubredditsContract {
         String _ID = "_id";
         /** Type: TEXT */
         String NAME = "name";
-        /** Type: TEXT */
-        String DESCRIPTION = "description";
     }
 
     public static class Subreddits implements SubredditsColumns {

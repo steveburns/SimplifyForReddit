@@ -3,13 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="steveburns.com.simplifyforreddit.MainActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_settings_white"
-        android:title="@string/action_settings"
-        app:showAsAction="ifRoom"
-        />
-    <item
         android:id="@+id/action_share_app"
         android:orderInCategory="101"
         android:icon="@drawable/ic_share_white"

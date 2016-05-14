@@ -10,12 +10,6 @@ import net.dean.jraw.http.oauth.OAuthException;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.Subreddit;
 
-import java.io.IOError;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
-
 import steveburns.com.simplifyforreddit.AuthConstants;
 
 /**

@@ -20,18 +20,8 @@ public class SubmissionsPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     /*
-        * Some helpful website:
+        * Some helpful websites I used went setting up the ViewPager
         * https://www.javacodegeeks.com/2013/04/android-tutorial-using-the-viewpager.html
-        *
-        * Remember you might have to call: notifyDataSetChanged
-        * see: http://stackoverflow.com/questions/8060904/add-delete-pages-to-viewpager-dynamically
-        *
-        * How to prevent scrolling to left or right:
-        * http://stackoverflow.com/questions/13270425/control-which-directions-the-viewpager-can-be-scrolled-dynamically-with-ui-feed
-        * !!! ONE WAY TO DO THIS CHEAPLY (MAYBE) IS TO KEEP TRACK OF THE CURRENT PAGE INDEX AND NOT LET THE USER GO BACK.
-        *
-        * Might have to use FragmentStatePagerAdapter:
-        *
         *
         * General, simple ViewPager example:
         * http://developer.android.com/reference/android/support/v4/view/ViewPager.html

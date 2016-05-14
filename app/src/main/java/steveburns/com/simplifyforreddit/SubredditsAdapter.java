@@ -14,7 +14,7 @@ import java.util.List;
 import steveburns.com.simplifyforreddit.data.SubredditsContract;
 
 /**
- * Created by sburns on 5/11/16.
+ * Created by sburns.
  */
 public class SubredditsAdapter extends ArrayAdapter<SubredditItem> {
 
@@ -59,7 +59,6 @@ public class SubredditsAdapter extends ArrayAdapter<SubredditItem> {
                         });
 
                 builder.show();
-
             }
         });
 
