@@ -3,7 +3,7 @@
     android:minWidth="250dp"
     android:minHeight="40dp"
     android:updatePeriodMillis="3600000"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@drawable/ic_widget"
     android:initialLayout="@layout/simplify_for_reddit_app_widget"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen|keyguard"
