@@ -2,9 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        releaseConfig {
+            storeFile file('steve_burns_android_key_store.jks')
+            storePassword "St3v3BurnsK3ystore"
+            keyAlias 'Steve Burns Keystore'
+            keyPassword "St3v3BurnsK3ystore"
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
-
     defaultConfig {
         applicationId "steveburns.com.simplifyforreddit"
         minSdkVersion 15
@@ -16,17 +23,19 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.releaseConfig
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
     compile 'net.dean.jraw:JRAW:0.8.0'
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.google.android.gms:play-services:8.3.0'
+    compile 'com.google.android.gms:play-services-ads:8.3.0'
+    compile 'com.google.android.gms:play-services-appinvite:8.3.0'
 }
