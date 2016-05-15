@@ -1,5 +1,7 @@
 package steveburns.com.simplifyforreddit;
 
+import android.app.LoaderManager;
+import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,16 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
-import steveburns.com.simplifyforreddit.data.SubredditsContract;
+import steveburns.com.simplifyforreddit.data.SubredditLoader;
 
 /**
  * Created by sburns on 5/11/16.
  */
-public class SubredditsListFragmentSimple extends Fragment {
+public class SubredditsListFragmentSimple extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private ArrayList<SubredditItem> mSubredditsList = null;
+    private final static int LOADER_IDENTIFIER = 100;
     private SubredditsAdapter mSubredditsAdapter = null;
 
     @Nullable
@@ -29,10 +29,8 @@ public class SubredditsListFragmentSimple extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_subreddits_list_simple, container, false);
 
-        populateSubredditsList();
-        if (mSubredditsAdapter == null) {
-            mSubredditsAdapter = new SubredditsAdapter(getActivity(), mSubredditsList);
-        }
+        mSubredditsAdapter = new SubredditsAdapter(getActivity(), null, 0);
+        getActivity().getLoaderManager().initLoader(LOADER_IDENTIFIER, null, this);
 
         ((ListView) view.findViewById(R.id.listView)).setAdapter(mSubredditsAdapter);
 
@@ -56,7 +54,6 @@ public class SubredditsListFragmentSimple extends Fragment {
                 AddSubredditFragment fragment = AddSubredditFragment.newInstance(new Action() {
                     @Override
                     public void execute() {
-                        populateSubredditsList();
                         mSubredditsAdapter.notifyDataSetChanged();
                     }
                 });
@@ -65,23 +62,25 @@ public class SubredditsListFragmentSimple extends Fragment {
         });
     }
 
-    private void populateSubredditsList() {
-        if (mSubredditsList == null) {
-            mSubredditsList = new ArrayList<>();
-        } else {
-            mSubredditsList.clear();
-        }
-        Cursor cursor = getContext().getContentResolver().query(SubredditsContract.Subreddits.buildDirUri(),
-                new String[]{"*"}, null, null, SubredditsContract.Subreddits.DEFAULT_SORT);
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
-                    Long id = cursor.getLong(cursor.getColumnIndex(SubredditsContract.Subreddits._ID));
-                    String name = cursor.getString(cursor.getColumnIndex(SubredditsContract.Subreddits.NAME));
-                    mSubredditsList.add(new SubredditItem(id, name));
-                } while(cursor.moveToNext());
-            }
-            cursor.close();
-        }
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return SubredditLoader.newAllSubredditInstance(getActivity());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        mSubredditsAdapter.swapCursor(cursor);
+    }
+
+    /**
+     * Called when a previously created loader is being reset, and thus
+     * making its data unavailable.  The application should at this point
+     * remove any references it has to the Loader's data.
+     *
+     * @param loader The Loader that is being reset.
+     */
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mSubredditsAdapter.swapCursor(null);
     }
 }
