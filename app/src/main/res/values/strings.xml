@@ -4,7 +4,10 @@
     <string name="title_activity_subreddits">Subreddits</string>
 
     <string name="add_subreddit">Add Subreddit</string>
+    <string name="subreddit_name">Subreddit name</string>
+    <string name="submission_image">Submission thumbnail image</string>
     <string name="remove_subreddit">Remove Subreddit: %s</string>
+    <string name="remove_subreddit_desc">Remove Subreddit</string>
     <string name="invitation_title">Simplify For Reddit Invite</string>
     <string name="invitation_message">Try the new Simplify For Reddit app and easily stay current with all of your favorite subreddits</string>
 
@@ -21,4 +24,5 @@
     <string name="loading_please_wait">Retrieving submissions, Please wait.</string>
 
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ad_content_description">Advertisement</string>
 </resources>

@@ -16,6 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:contentDescription="@string/submission_image"
             />
 
         <TextView
@@ -26,6 +27,7 @@
             android:textSize="@dimen/text_size_regular"
             android:gravity="center"
             android:text="@string/app_name"
+            android:contentDescription="@string/title_label"
             />
 
     </LinearLayout>

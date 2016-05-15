@@ -31,6 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_top_margin"
                     android:layout_marginBottom="@dimen/layout_bottom_margin"
+                    android:contentDescription="@string/submission_image"
                     />
 
                 <!-- Title -->
@@ -38,12 +39,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/Label"
-                    android:text="@string/title_label"/>
+                    android:text="@string/title_label"
+                    />
                 <TextView
                     android:id="@+id/fragment_main_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PLACE SUBMISSION TITLE HERE"
+                    android:contentDescription="@string/title_label"
                     style="@style/primary_text"
                     android:layout_marginTop="@dimen/layout_top_margin"
                     />
@@ -52,6 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/read_more"
+                    android:contentDescription="@string/read_more"
                     style="@style/primary_text"
                     android:layout_marginBottom="@dimen/layout_bottom_margin"
                     />
@@ -62,13 +65,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/Label"
-                    android:text="@string/text_label"/>
+                    android:text="@string/text_label"
+                    android:contentDescription="@string/text_label"
+                    />
                 <TextView
                     android:id="@+id/fragment_main_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PLACE SUBMISSION TEXT HERE"
                     style="@style/primary_text"
+                    android:contentDescription="@string/text_label"
                     android:layout_marginTop="@dimen/layout_top_margin"
                     android:layout_marginBottom="@dimen/layout_bottom_margin"
                     />
@@ -92,12 +97,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             style="@style/Label"
-                            android:text="@string/author_label"/>
+                            android:text="@string/author_label"
+                            />
                         <TextView
                             android:id="@+id/fragment_main_author"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="PLACE AUTHOR NAME HERE"
+                            android:contentDescription="@string/author_label"
                             style="@style/primary_text"
                             />
                     </LinearLayout>
@@ -118,7 +124,7 @@
                             android:id="@+id/fragment_main_created"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="PLACE CREATE DATE HERE"
+                            android:contentDescription="@string/created_label"
                             style="@style/primary_text"
                             />
                     </LinearLayout>
@@ -139,7 +145,7 @@
                             android:id="@+id/fragment_main_subreddit_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="PLACE SUBREDDIT NAME HERE"
+                            android:contentDescription="@string/subreddit_name"
                             style="@style/primary_text"
                             />
                     </LinearLayout>
@@ -167,7 +173,7 @@
                     android:id="@+id/fragment_main_comment_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Put first comment here"
+                    android:contentDescription="@string/comment_label"
                     style="@style/primary_text"
                     android:layout_marginTop="@dimen/layout_top_margin"
                     android:layout_marginBottom="@dimen/layout_bottom_margin"
@@ -183,7 +189,7 @@
                     android:id="@+id/fragment_main_comment_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Put second comment here"
+                    android:contentDescription="@string/comment_label"
                     style="@style/primary_text"
                     android:layout_marginTop="@dimen/layout_top_margin"
                     android:layout_marginBottom="@dimen/layout_bottom_margin"
@@ -199,7 +205,7 @@
                     android:id="@+id/fragment_main_comment_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Put third comment here"
+                    android:contentDescription="@string/comment_label"
                     style="@style/primary_text"
                     android:layout_marginTop="@dimen/layout_top_margin"
                     android:layout_marginBottom="@dimen/layout_bottom_margin"
@@ -218,6 +224,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         ads:adSize="BANNER"
+        android:contentDescription="@string/ad_content_description"
         ads:adUnitId="@string/banner_ad_unit_id" />
 
 </RelativeLayout>
