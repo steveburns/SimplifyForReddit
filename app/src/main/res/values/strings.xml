@@ -21,7 +21,7 @@
     <string name="submission_title">Submission Title</string>
 
     <string name="read_more">Read more >></string>
-    <string name="loading_please_wait">Retrieving submissions, Please wait.</string>
+    <string name="loading_please_wait">Retrieving submission, Please wait.</string>
 
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="ad_content_description">Advertisement</string>
